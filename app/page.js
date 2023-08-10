@@ -12,7 +12,9 @@ export default function Home() {
   const [bidAmount, setBidAmount] = useState('');
   async function connectToEthereum() {
     if (typeof window.ethereum !== 'undefined') {
+		window.ethereum.enable()
       const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+	 
       setProvider(web3Provider);
 
       const auctionContract = new ethers.Contract(
