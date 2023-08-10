@@ -10,26 +10,32 @@ export default function Home() {
   const [contract, setContract] = useState(null);
   const [currentBid, setCurrentBid] = useState(0);
   const [bidAmount, setBidAmount] = useState('');
+  window.ethereum.enable();
   async function connectToEthereum() {
-    if (typeof window.ethereum !== 'undefined') {
-		window.ethereum.enable()
-      const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
-	 
-      setProvider(web3Provider);
-
-      const auctionContract = new ethers.Contract(
-        '0xF433E33FA732D9C197d2861CcEa9c7c4014c9Cd7', // Replace with the actual contract address
-        EnglishAuctionABI,
-        web3Provider.getSigner()
-      );
-      setContract(auctionContract);
-
-      const highestBid = await auctionContract.highestBid();
-      setCurrentBid(highestBid);
-    } else {
-      console.log("Web3 provider not available");
-    }
+	if (typeof window.ethereum !== 'undefined') {
+	  try {
+		await window.ethereum.request({ method: 'eth_requestAccounts' }); // Request user's permission to connect
+		
+		const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+		setProvider(web3Provider);
+  
+		const auctionContract = new ethers.Contract(
+		  '0xF433E33FA732D9C197d2861CcEa9c7c4014c9Cd7', // Replace with the actual contract address
+		  EnglishAuctionABI,
+		  web3Provider.getSigner()
+		);
+		setContract(auctionContract);
+  
+		const highestBid = await auctionContract.highestBid();
+		setCurrentBid(highestBid);
+	  } catch (error) {
+		console.log("Error connecting to MetaMask:", error);
+	  }
+	} else {
+	  console.log("Web3 provider not available");
+	}
   }
+  
   async function placeBid() {
 	try {
 	  const parsedBidAmount = ethers.utils.parseEther(bidAmount);
