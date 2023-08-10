@@ -1,7 +1,6 @@
 "use client"
 import { useState } from 'react';
 import { ethers } from 'ethers';
-//import styles from './styles.css';
 import styles from './page.module.css'
 import EnglishAuctionABI from '../EnglishAuction.json'; // Import the contract ABI
 
@@ -10,8 +9,8 @@ export default function Home() {
   const [contract, setContract] = useState(null);
   const [currentBid, setCurrentBid] = useState(0);
   const [bidAmount, setBidAmount] = useState('');
-  window.ethereum.enable();
   async function connectToEthereum() {
+	window.ethereum.enable();
 	if (typeof window.ethereum !== 'undefined') {
 	  try {
 		await window.ethereum.request({ method: 'eth_requestAccounts' }); // Request user's permission to connect
