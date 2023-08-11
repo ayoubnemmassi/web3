@@ -13,7 +13,6 @@ export default function Home() {
 	
 	if (typeof window.ethereum !== 'undefined') {
 	  try {
-		window.ethereum.enable();
 		await window.ethereum.request({ method: 'eth_requestAccounts' }); // Request user's permission to connect
 		
 		const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
